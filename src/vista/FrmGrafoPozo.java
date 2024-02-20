@@ -10,6 +10,8 @@ import controlador.TDA.listas.DynamicList;
 import controlador.Utiles.Utiles;
 import vista.util.UtilVistaPozo;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -94,11 +96,18 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
             if (matriz[o][d] == Double.POSITIVE_INFINITY) {
                 JOptionPane.showMessageDialog(null, "No existe camino entre los vértices " + o + " y " + distancia);
             } else {
-                JOptionPane.showMessageDialog(null, "La distancia entre los vértices " + o + " y " + d + " es: " + distancia[o][d]);
+                StringBuilder sb = new StringBuilder();
+                sb.append("La distancia entre los vértices ").append(o).append(" y ").append(d).append(" es: ").append(distancia[o][d]);
+                sb.append("\n");
+                DynamicList<Integer> camino = caminoFloyd(matriz, o, d);
+                sb.append("El camino es: ").append(camino.toString());
+                txtFloyd.setText(sb.toString());
+                txtFloyd.setEnabled(false);
+                /*JOptionPane.showMessageDialog(null, "La distancia entre los vértices " + o + " y " + d + " es: " + distancia[o][d]);
                 System.out.println("La distancia entre los vértices " + o + " y " + d + " es: " + distancia[o][d]);
                 DynamicList<Integer> camino = caminoFloyd(matriz, o, d);
                 System.out.println(camino.toString());
-                JOptionPane.showMessageDialog(null, "El camino es: " + camino.toString());
+                JOptionPane.showMessageDialog(null, "El camino es: " + camino.toString());*/
             }
 
         }
@@ -118,6 +127,19 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
         return camino;
     }
 
+    public void  recorridoAnchura() throws Exception {
+        Integer o = cbxOrigen.getSelectedIndex() + 1;
+        DynamicList<Integer> recorrido = pd.getGrafo().recorridoAnchura(o);
+        txtAnchura.setText(recorrido.toString());
+    }
+
+    public void recorridoProfundidad() throws Exception {
+        Integer o = cbxOrigen.getSelectedIndex() + 1;
+        DynamicList<Integer> recorrido = pd.getGrafo().recorridoProfundidad(o);
+        txtProfundidad.setText(recorrido.toString());
+    }
+    
+
     /*Double distancia = UtilVistaPozo.calcularDistanciaPozo(pd.getPozoList().getInfo(v1), pd.getPozoList().getInfo(v2));
             distancia = Utiles.redondear(distancia);
 
@@ -133,7 +155,6 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnP = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbxOrigen = new javax.swing.JComboBox<>();
@@ -145,31 +166,24 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnAnchura = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAnchura = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        btnProfundidad = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtProfundidad = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        txtBellman = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        txtFloyd = new javax.swing.JTextArea();
+        btnBellman = new javax.swing.JButton();
+        BtnFloyd = new javax.swing.JButton();
         buttonAero1 = new org.edisoncor.gui.button.ButtonAero();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        btnP.setText("PRUEBA");
-        btnP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPActionPerformed(evt);
-            }
-        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -271,35 +285,55 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
 
         jLabel4.setText("Recorrido anchura:");
 
-        jButton3.setText("jButton3");
+        btnAnchura.setText("Calcular");
+        btnAnchura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnchuraActionPerformed(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtAnchura.setColumns(20);
+        txtAnchura.setRows(5);
+        jScrollPane1.setViewportView(txtAnchura);
 
         jLabel5.setText("Recorrido en profundidad");
 
-        jButton4.setText("jButton4");
+        btnProfundidad.setText("Calcular");
+        btnProfundidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProfundidadActionPerformed(evt);
+            }
+        });
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        txtProfundidad.setColumns(20);
+        txtProfundidad.setRows(5);
+        jScrollPane2.setViewportView(txtProfundidad);
 
         jLabel6.setText("Recorrido Bellman Ford");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
+        txtBellman.setColumns(20);
+        txtBellman.setRows(5);
+        jScrollPane3.setViewportView(txtBellman);
 
         jLabel7.setText("Recorrido de floyd");
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        jScrollPane4.setViewportView(jTextArea4);
+        txtFloyd.setColumns(20);
+        txtFloyd.setRows(5);
+        jScrollPane4.setViewportView(txtFloyd);
 
-        jButton5.setText("jButton5");
+        btnBellman.setText("Calcular");
+        btnBellman.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBellmanActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("jButton6");
+        BtnFloyd.setText("Calcular");
+        BtnFloyd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnFloydActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -313,23 +347,23 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
-                                .addComponent(jButton4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
+                                .addComponent(btnProfundidad))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton5))
+                                .addComponent(btnBellman))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6))
+                                .addComponent(BtnFloyd))
                             .addComponent(jScrollPane4)
                             .addComponent(jScrollPane2)
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3)))
+                                .addComponent(btnAnchura)))
                         .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
@@ -338,25 +372,25 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jButton3))
+                    .addComponent(btnAnchura))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jButton4))
+                    .addComponent(btnProfundidad))
                 .addGap(15, 15, 15)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6)
-                    .addComponent(jButton5))
+                    .addComponent(btnBellman))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jButton6))
+                    .addComponent(BtnFloyd))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -381,11 +415,7 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(buttonAero1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnP))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -400,9 +430,7 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
                         .addGap(22, 22, 22)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(btnP)
-                .addContainerGap())
+                .addGap(47, 47, 47))
         );
 
         pack();
@@ -430,13 +458,33 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_buttonAero1ActionPerformed
 
-    private void btnPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPActionPerformed
+    private void btnBellmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBellmanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBellmanActionPerformed
+
+    private void btnAnchuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnchuraActionPerformed
+        try {
+            recorridoAnchura();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmGrafoPozo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAnchuraActionPerformed
+
+    private void btnProfundidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfundidadActionPerformed
+        try {
+            recorridoProfundidad();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmGrafoPozo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnProfundidadActionPerformed
+
+    private void BtnFloydActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFloydActionPerformed
         try {
             floyd();
-        } catch (Exception e) {
-
+        } catch (Exception ex) {
+            Logger.getLogger(FrmGrafoPozo.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnPActionPerformed
+    }//GEN-LAST:event_BtnFloydActionPerformed
 
     /**
      * @param args the command line arguments
@@ -481,16 +529,15 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnP;
+    private javax.swing.JButton BtnFloyd;
+    private javax.swing.JButton btnAnchura;
+    private javax.swing.JButton btnBellman;
+    private javax.swing.JButton btnProfundidad;
     private org.edisoncor.gui.button.ButtonAero buttonAero1;
     private javax.swing.JComboBox<String> cbxDestino;
     private javax.swing.JComboBox<String> cbxOrigen;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -505,9 +552,9 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
+    private javax.swing.JTextArea txtAnchura;
+    private javax.swing.JTextArea txtBellman;
+    private javax.swing.JTextArea txtFloyd;
+    private javax.swing.JTextArea txtProfundidad;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,4 +19,10 @@ L.marker([-0.10819559069620918, -78.47050979949042]).addTo(map)
 ;L.marker([-4.068436711923744, -79.75537125307139]).addTo(map)
 .bindPopup('Pozo3')
 .openPopup();
+;L.marker([-2.90533674060071, -78.99649969586414]).addTo(map)
+.bindPopup('Pozo4')
+.openPopup();
+;L.marker([-1.2405579535979636, -78.6276040985288]).addTo(map)
+.bindPopup('Pozo5')
+.openPopup();
 ;
