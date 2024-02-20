@@ -30,6 +30,7 @@ public class FrmPozo extends javax.swing.JFrame {
      */
     public FrmPozo() {
         initComponents();
+        this.setLocationRelativeTo(null);
         limpiar();
         panelFoto1.setIcon(new ImageIcon("foto/Foto.png"));
         panelFoto2.setIcon(new ImageIcon("foto/Foto.png"));
@@ -120,6 +121,34 @@ public class FrmPozo extends javax.swing.JFrame {
         }
     }
 
+    public void modificar(){
+        int fila = tbPozo.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Escoja un registro de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                String uuidF1 = UUID.randomUUID().toString();
+                String uuidF2 = UUID.randomUUID().toString();
+                Utiles.copiarArchivo(foto1, new File("foto/" + uuidF1 + "." + Utiles.extension(foto1.getName())));
+                Utiles.copiarArchivo(foto2, new File("foto/" + uuidF2 + "." + Utiles.extension(foto2.getName())));
+                pd.getPozo().getCoordenada().setLogitud(Double.parseDouble(txtLongitud.getText()));
+                pd.getPozo().getCoordenada().setLatitud(Double.parseDouble(txtLatitud.getText()));
+                pd.getPozo().setNombre(txtNombre.getText());
+                pd.getPozo().setFoto1(uuidF1 + "." + Utiles.extension(foto1.getName()));
+                pd.getPozo().setFoto2(uuidF2 + "." + Utiles.extension(foto2.getName()));
+                if (pd.merge(pd.getPozo(), fila)){
+                    JOptionPane.showMessageDialog(null, "Datos modificados");
+                    limpiar();
+                    cargarTabla();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo modificar, hubo un error");
+                }
+            } catch (Exception ex) {
+                ex.toString();
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -148,6 +177,9 @@ public class FrmPozo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbPozo = new javax.swing.JTable();
         buttonAero1 = new org.edisoncor.gui.button.ButtonAero();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -305,7 +337,7 @@ public class FrmPozo extends javax.swing.JFrame {
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 51));
@@ -330,6 +362,11 @@ public class FrmPozo extends javax.swing.JFrame {
 
         buttonAero1.setBackground(new java.awt.Color(204, 204, 0));
         buttonAero1.setText("Modificar");
+        buttonAero1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAero1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
         panelCurves1.setLayout(panelCurves1Layout);
@@ -365,6 +402,20 @@ public class FrmPozo extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        jMenu1.setText("Grafos");
+
+        jMenuItem1.setText("Grafo y mapas");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -429,6 +480,14 @@ public class FrmPozo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tbPozoMouseClicked
 
+    private void buttonAero1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAero1ActionPerformed
+        modificar();
+    }//GEN-LAST:event_buttonAero1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new FrmGrafoPozo(null, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -474,6 +533,9 @@ public class FrmPozo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private org.edisoncor.gui.panel.Panel panel1;

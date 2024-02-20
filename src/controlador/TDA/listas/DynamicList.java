@@ -265,7 +265,7 @@ public class DynamicList<E> {
             Node<E> currentNode = prevNode.getNext();
             E info = currentNode.getInfo();
             prevNode.setNext(currentNode.getNext());
-            currentNode.setNext(null); // Liberar el nodo eliminado
+            currentNode.setNext(null);
             lenght--;
             return info;
         }

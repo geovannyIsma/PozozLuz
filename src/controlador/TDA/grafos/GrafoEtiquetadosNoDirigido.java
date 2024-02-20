@@ -32,37 +32,4 @@ public class GrafoEtiquetadosNoDirigido<E> extends GrafosEtiquetadosDirigidos<E>
         } else 
             throw new VerticeExepction();
     }
-
-    public static void main(String[] args) {
-        try {
-            GrafoEtiquetadosNoDirigido<String> ged = new GrafoEtiquetadosNoDirigido<>(7, String.class);
-            ged.labelVertice(1, "Estefania");
-            ged.labelVertice(2, "Luna");
-            ged.labelVertice(3, "Jimenez");
-            ged.labelVertice(4, "Criollo");
-            ged.labelVertice(5, "Nivelo");
-            ged.labelVertice(6, "Darwin");
-            ged.labelVertice(7, "Romer");
-            ged.insertEdge("Estefania", "Luna", 80.0);
-            ged.insertEdge("Estefania", "Jimenez", 40.0);
-            ged.insertEdge("Jimenez", "Criollo", 20.0);
-            ged.insertEdge("Jimenez", "Nivelo", 70.0);
-            ged.insertEdge("Luna", "Darwin", 20.0);
-            ged.insertEdge("Darwin", "Romer", 60.0);
-
-            System.out.println(ged.toString());
-            System.out.println("----------------");
-            ged.floyd();
-            //System.out.println(ged.recorridoAnchura(1).toString());
-            //System.out.println(ged.recorridoProfundidad(1).toString());
-//            PaintGraph p =  new PaintGraph();
-//            p.updateFileLabel(ged);
-//            Utiles.abrirArchivoHTML("c:/Users/romer/Documents/NetBeansProjects/Pozos _luz/d3/grafo.html");
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        }
-    }
-    
-    
-    
 }

@@ -153,65 +153,9 @@ public class GrafoDirigido extends Grafo{
         }
         return recorrido;
     }
-    /**
-     * @return
-     */
+
     @Override
-    public Double[][] floyd() throws EmptyException {
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        Double[][] matriz = new Double[num_vertice + 1][num_vertice + 1];
-        for (int i = 1; i <= num_vertice; i++) {
-            for (int j = 1; j <= num_vertice; j++) {
-                if (i == j) {
-                    matriz[i][j] = 0.0;
-                } else {
-                    matriz[i][j] = Double.POSITIVE_INFINITY;
-                }
-            }
-        }
-        for (int i = 1; i <= num_vertice; i++) {
-            DynamicList<Adyacencia> listaA = adyacentes(i);
-            for (int j = 0; j < listaA.getLenght(); j++) {
-                Adyacencia a = listaA.getInfo(j);
-                matriz[i][a.getDestino()] = a.getPeso();
-            }
-        }
-        for (int k = 1; k <= num_vertice; k++) {
-            for (int i = 1; i <= num_vertice; i++) {
-                for (int j = 1; j <= num_vertice; j++) {
-                    if (matriz[i][j] > matriz[i][k] + matriz[k][j]) {
-                        matriz[i][j] = matriz[i][k] + matriz[k][j];
-                    }
-                }
-            }
-        }
-        return matriz;
-    }
-
-    public DynamicList<Integer> reconstruir_camino(Integer inicio, Integer fin, Double[][] matriz) throws EmptyException {
-        DynamicList<Integer> camino = new DynamicList<>();
-        if (inicio.intValue() <= num_vertice && fin.intValue() <= num_vertice) {
-            if (matriz[inicio][fin] != Double.POSITIVE_INFINITY) {
-                camino.add(inicio);
-                while (inicio.intValue() != fin.intValue()) {
-                    for (int i = 1; i <= num_vertice; i++) {
-                        if (matriz[inicio][fin] == matriz[inicio][i] + matriz[i][fin]) {
-                            camino.add(i);
-                            inicio = i;
-                            break;
-                        }
-                    }
-                }
-            }
-        } else {
-            throw new EmptyException("Error. Vertice no existe");
-        }
-        return camino;
-    }
-
-    public Double[][] recorridoFloyd() throws Exception {
-        long startTime = System.nanoTime();
-
+    public Double[][] floydRecorrido () throws Exception {
         int V = num_vertices();
         Double[][] distancias = new Double[V + 1][V + 1];
         Double[][] predecesores = new Double[V + 1][V + 1];
@@ -241,19 +185,11 @@ public class GrafoDirigido extends Grafo{
                 }
             }
         }
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);  // Tiempo de ejecución en nanosegundos
-        System.out.println("Tiempo de ejecución del algoritmo de Floyd: " + duration + " nanosegundos");
-
-
         return predecesores;
     }
 
     //metodo para las distancia de floyd
     public Double[][] recorridoFloydDistancias() throws Exception {
-        long startTime = System.nanoTime();
-
         int V = num_vertices();
         Double[][] distancias = new Double[V + 1][V + 1];
         Double[][] predecesores = new Double[V + 1][V + 1];
@@ -283,15 +219,81 @@ public class GrafoDirigido extends Grafo{
                 }
             }
         }
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);  // Tiempo de ejecución en nanosegundos
-        System.out.println("Tiempo de ejecución del algoritmo de Floyd: " + duration + " nanosegundos");
-
         return distancias;
     }
 
+    @Override
+    public Double[] bellmanFordRecorrido(Integer v) throws Exception {
+        int V = num_vertices();
+        Double[] distancias = new Double[V + 1];
+        Double[] predecesores = new Double[V + 1];
 
+        for (int i = 1; i <= V; i++) {
+            distancias[i] = Double.MAX_VALUE;
+            predecesores[i] = null;
+        }
+        distancias[v] = 0.0;
+
+        for (int i = 1; i <= V - 1; i++) {
+            for (int j = 1; j <= V; j++) {
+                DynamicList<Adyacencia> listaA = adyacentes(j);
+                for (int k = 0; k < listaA.getLenght(); k++) {
+                    Adyacencia a = listaA.getInfo(k);
+                    if (distancias[j] + a.getPeso() < distancias[a.getDestino()]) {
+                        distancias[a.getDestino()] = distancias[j] + a.getPeso();
+                        predecesores[a.getDestino()] = (double) j;
+                    }
+                }
+            }
+        }
+
+        for (int j = 1; j <= V; j++) {
+            DynamicList<Adyacencia> listaA = adyacentes(j);
+            for (int k = 0; k < listaA.getLenght(); k++) {
+                Adyacencia a = listaA.getInfo(k);
+                if (distancias[j] + a.getPeso() < distancias[a.getDestino()]) {
+                    throw new Exception("El grafo contiene un ciclo de peso negativo");
+                }
+            }
+        }
+        return predecesores;
+    }
+
+    public Double[] recorridoBellmanDistancias(Integer v) throws Exception {
+        int V = num_vertices();
+        Double[] distancias = new Double[V + 1];
+        Double[] predecesores = new Double[V + 1];
+
+        for (int i = 1; i <= V; i++) {
+            distancias[i] = Double.MAX_VALUE;
+            predecesores[i] = null;
+        }
+        distancias[v] = 0.0;
+
+        for (int i = 1; i <= V - 1; i++) {
+            for (int j = 1; j <= V; j++) {
+                DynamicList<Adyacencia> listaA = adyacentes(j);
+                for (int k = 0; k < listaA.getLenght(); k++) {
+                    Adyacencia a = listaA.getInfo(k);
+                    if (distancias[j] + a.getPeso() < distancias[a.getDestino()]) {
+                        distancias[a.getDestino()] = distancias[j] + a.getPeso();
+                        predecesores[a.getDestino()] = (double) j;
+                    }
+                }
+            }
+        }
+
+        for (int j = 1; j <= V; j++) {
+            DynamicList<Adyacencia> listaA = adyacentes(j);
+            for (int k = 0; k < listaA.getLenght(); k++) {
+                Adyacencia a = listaA.getInfo(k);
+                if (distancias[j] + a.getPeso() < distancias[a.getDestino()]) {
+                    throw new Exception("El grafo contiene un ciclo de peso negativo");
+                }
+            }
+        }
+        return distancias;
+    }
 
     public Integer getNum_aristas() {
         return num_aristas;
@@ -307,6 +309,10 @@ public class GrafoDirigido extends Grafo{
 
     public void setListaAdyacencias(DynamicList<Adyacencia>[] listaAdyacencias) {
         this.listaAdyacencias = listaAdyacencias;
+    }
+
+    public DynamicList<Adyacencia> getAdyacencias(Integer v) {
+        return listaAdyacencias[v];
     }
     
     public static void main(String[] args) {
