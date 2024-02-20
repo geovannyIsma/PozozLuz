@@ -46,7 +46,8 @@ public abstract class Grafo {
     public abstract DynamicList<Integer> recorridoAnchura(Integer v) throws Exception;
     public abstract DynamicList<Integer> recorridoProfundidad(Integer v) throws Exception;
     //floyd
-    public abstract Double[][] floyd() throws Exception;
+    public abstract Double[][] floyd() throws EmptyException;
+    public abstract Double[][] recorridoFloyd() throws Exception;
 
 
 

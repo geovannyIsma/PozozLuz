@@ -298,4 +298,18 @@ public class DynamicList<E> {
         }
         return false;
     }
+
+    // Metodo para invertir la lista
+    public void invertir_orden() {
+        Node<E> prev = null;
+        Node<E> next = null;
+        Node<E> actual = header;
+        while (actual != null) {
+            next = actual.getNext();
+            actual.setNext(prev);
+            prev = actual;
+            actual = next;
+        }
+        header = prev;
+    }
 }

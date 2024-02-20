@@ -4,9 +4,12 @@
  */
 package vista.util;
 
+import controlador.DAO.Pozo.PozoDao;
 import controlador.TDA.grafos.GrafosEtiquetadosDirigidos;
+import controlador.TDA.listas.DynamicList;
 import controlador.Utiles.Utiles;
 import java.io.FileWriter;
+import javax.swing.JComboBox;
 import modelo.Pozo;
 
 /**
@@ -42,6 +45,14 @@ public class UtilVistaPozo {
         Double dist = Utiles.coordGpsToKm(o.getCoordenada().getLatitud(), o.getCoordenada().getLogitud(),
                                           d.getCoordenada().getLatitud(), d.getCoordenada().getLogitud());
         return Utiles.redondear(dist);
+    }
+    
+    public static void cargarComboPozo(JComboBox cbx) throws Exception {
+        cbx.removeAllItems();
+        DynamicList<Pozo> list = new PozoDao().getPozoList();
+        for (int i = 0; i < list.getLenght(); i++) {
+            cbx.addItem(list.getInfo(i));
+        }
     }
     
 }

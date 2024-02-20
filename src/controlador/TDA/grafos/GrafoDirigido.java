@@ -153,9 +153,11 @@ public class GrafoDirigido extends Grafo{
         }
         return recorrido;
     }
-
+    /**
+     * @return
+     */
     @Override
-    public Double[][] floyd() throws Exception {
+    public Double[][] floyd() throws EmptyException {
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         Double[][] matriz = new Double[num_vertice + 1][num_vertice + 1];
         for (int i = 1; i <= num_vertice; i++) {
@@ -185,6 +187,110 @@ public class GrafoDirigido extends Grafo{
         }
         return matriz;
     }
+
+    public DynamicList<Integer> reconstruir_camino(Integer inicio, Integer fin, Double[][] matriz) throws EmptyException {
+        DynamicList<Integer> camino = new DynamicList<>();
+        if (inicio.intValue() <= num_vertice && fin.intValue() <= num_vertice) {
+            if (matriz[inicio][fin] != Double.POSITIVE_INFINITY) {
+                camino.add(inicio);
+                while (inicio.intValue() != fin.intValue()) {
+                    for (int i = 1; i <= num_vertice; i++) {
+                        if (matriz[inicio][fin] == matriz[inicio][i] + matriz[i][fin]) {
+                            camino.add(i);
+                            inicio = i;
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            throw new EmptyException("Error. Vertice no existe");
+        }
+        return camino;
+    }
+
+    public Double[][] recorridoFloyd() throws Exception {
+        long startTime = System.nanoTime();
+
+        int V = num_vertices();
+        Double[][] distancias = new Double[V + 1][V + 1];
+        Double[][] predecesores = new Double[V + 1][V + 1];
+
+        for (int i = 1; i <= V; i++) {
+            for (int j = 1; j <= V; j++) {
+                if (i == j) {
+                    distancias[i][j] = 0.0;
+                    predecesores[i][j] = (double)i;
+                } else if (existe_arista(i, j)) {
+                    distancias[i][j] = peso_arista(i, j);
+                    predecesores[i][j] = (double)i;
+                } else {
+                    distancias[i][j] = Double.MAX_VALUE;
+                    predecesores[i][j] = null;
+                }
+            }
+        }
+
+        for (int k = 1; k <= V; k++) {
+            for (int i = 1; i <= V; i++) {
+                for (int j = 1; j <= V; j++) {
+                    if (distancias[i][k] + distancias[k][j] < distancias[i][j]) {
+                        distancias[i][j] = distancias[i][k] + distancias[k][j];
+                        predecesores[i][j] = predecesores[k][j];
+                    }
+                }
+            }
+        }
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);  // Tiempo de ejecución en nanosegundos
+        System.out.println("Tiempo de ejecución del algoritmo de Floyd: " + duration + " nanosegundos");
+
+
+        return predecesores;
+    }
+
+    //metodo para las distancia de floyd
+    public Double[][] recorridoFloydDistancias() throws Exception {
+        long startTime = System.nanoTime();
+
+        int V = num_vertices();
+        Double[][] distancias = new Double[V + 1][V + 1];
+        Double[][] predecesores = new Double[V + 1][V + 1];
+
+        for (int i = 1; i <= V; i++) {
+            for (int j = 1; j <= V; j++) {
+                if (i == j) {
+                    distancias[i][j] = 0.0;
+                    predecesores[i][j] = (double) i;
+                } else if (existe_arista(i, j)) {
+                    distancias[i][j] = peso_arista(i, j);
+                    predecesores[i][j] = (double) i;
+                } else {
+                    distancias[i][j] = Double.MAX_VALUE;
+                    predecesores[i][j] = null;
+                }
+            }
+        }
+
+        for (int k = 1; k <= V; k++) {
+            for (int i = 1; i <= V; i++) {
+                for (int j = 1; j <= V; j++) {
+                    if (distancias[i][k] + distancias[k][j] < distancias[i][j]) {
+                        distancias[i][j] = distancias[i][k] + distancias[k][j];
+                        predecesores[i][j] = predecesores[k][j];
+                    }
+                }
+            }
+        }
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);  // Tiempo de ejecución en nanosegundos
+        System.out.println("Tiempo de ejecución del algoritmo de Floyd: " + duration + " nanosegundos");
+
+        return distancias;
+    }
+
 
 
     public Integer getNum_aristas() {

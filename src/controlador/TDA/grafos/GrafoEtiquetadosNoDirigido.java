@@ -52,7 +52,7 @@ public class GrafoEtiquetadosNoDirigido<E> extends GrafosEtiquetadosDirigidos<E>
 
             System.out.println(ged.toString());
             System.out.println("----------------");
-            ged.caminoFloyd(1, 7).toString();
+            ged.floyd();
             //System.out.println(ged.recorridoAnchura(1).toString());
             //System.out.println(ged.recorridoProfundidad(1).toString());
 //            PaintGraph p =  new PaintGraph();
