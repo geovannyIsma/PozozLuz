@@ -62,6 +62,4 @@ public class Pozo {
     public String toString() {
         return nombre;
     }
-    
-    
 }

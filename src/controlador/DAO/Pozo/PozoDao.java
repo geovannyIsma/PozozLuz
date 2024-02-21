@@ -11,7 +11,6 @@ import controlador.TDA.listas.DynamicList;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Random;
 import modelo.Pozo;
 
 /**
@@ -44,8 +43,6 @@ public class PozoDao extends DaoImplement<Pozo>{
         this.grafo = grafo;
     }
     
-    
-
     public DynamicList<Pozo> getPozoList() {
         if (pozoList.isEmpty()) {
             pozoList = all();

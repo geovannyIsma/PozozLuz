@@ -104,7 +104,6 @@ public class GrafoDirigido extends Grafo{
 
     @Override
     public DynamicList<Integer> recorridoAnchura(Integer v) throws Exception {
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         DynamicList<Integer> recorrido = new DynamicList<>();
         DynamicList<Integer> cola = new DynamicList<>();
         DynamicList<Integer> visitados = new DynamicList<>();

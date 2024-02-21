@@ -88,6 +88,35 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
             }
         }
     }
+    
+    public void guardarGrafo() {
+        try {
+            int i = JOptionPane.
+                    showConfirmDialog(null, "Esta seguro de gaurdar?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+
+            if (i == JOptionPane.OK_OPTION) {
+                if (pd.getGrafo() != null) {
+                    pd.guardarGrafo();
+                    JOptionPane.showMessageDialog(null, "Guardadazo");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Los grafos vacion no se guardaran");
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void load() throws Exception{
+        int i = JOptionPane.
+                    showConfirmDialog(null, "Esta seguro de gaurdar?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+
+            if (i == JOptionPane.OK_OPTION) {
+                pd.cargarGrafo();
+                limpiar();
+                JOptionPane.showMessageDialog(null, "Guardadazo");
+            }
+    }
 
     public void floyd() throws Exception {
         long inicio = System.nanoTime();
@@ -97,9 +126,12 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
             Double[][] matriz = pd.getGrafo().floydRecorrido();
             Double[][] distancia = pd.getGrafo().recorridoFloydDistancias();
 
-            if (matriz[o][d] == Double.POSITIVE_INFINITY) {
+            if (matriz[o][d] == Double.POSITIVE_INFINITY || matriz[o][d] == null) {
                 JOptionPane.showMessageDialog(null, "No existe camino entre los vértices " + o + " y " + distancia);
-            } else {
+            } else if (o.intValue() == d.intValue()) {
+                JOptionPane.showMessageDialog(null, "El vértice de origen y destino son iguales");
+            }
+            else {
                 StringBuilder sb = new StringBuilder();
                 sb.append("La distancia entre los vértices ").append(o).append(" y ").append(d).append(" es: ").append(distancia[o][d]);
                 sb.append("\n");
@@ -221,6 +253,7 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
         jScrollPane5 = new javax.swing.JScrollPane();
         tbTiempo = new javax.swing.JTable();
         buttonAero2 = new org.edisoncor.gui.button.ButtonAero();
+        buttonAero3 = new org.edisoncor.gui.button.ButtonAero();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -457,6 +490,18 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
 
         buttonAero2.setBackground(new java.awt.Color(0, 204, 51));
         buttonAero2.setText("Guardar grafo");
+        buttonAero2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAero2ActionPerformed(evt);
+            }
+        });
+
+        buttonAero3.setText("Cargar grafo");
+        buttonAero3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAero3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -464,18 +509,20 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(buttonAero1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(buttonAero2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(buttonAero2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonAero3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(buttonAero1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -492,7 +539,9 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(buttonAero2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonAero2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonAero3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11))
         );
 
@@ -555,6 +604,17 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_BtnFloydActionPerformed
 
+    private void buttonAero2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAero2ActionPerformed
+        guardarGrafo();
+    }//GEN-LAST:event_buttonAero2ActionPerformed
+
+    private void buttonAero3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAero3ActionPerformed
+        try {
+            load();
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_buttonAero3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -604,6 +664,7 @@ public class FrmGrafoPozo extends javax.swing.JDialog {
     private javax.swing.JButton btnProfundidad;
     private org.edisoncor.gui.button.ButtonAero buttonAero1;
     private org.edisoncor.gui.button.ButtonAero buttonAero2;
+    private org.edisoncor.gui.button.ButtonAero buttonAero3;
     private javax.swing.JComboBox<String> cbxDestino;
     private javax.swing.JComboBox<String> cbxOrigen;
     private javax.swing.JButton jButton1;
